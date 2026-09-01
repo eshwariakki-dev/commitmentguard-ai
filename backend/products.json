@@ -1,0 +1,188 @@
+{
+  "merchant": {
+    "name": "Kiraana Electronics & Gifts",
+    "currency": "INR"
+  },
+  "products": [
+    {
+      "id": "sku_101",
+      "name": "SoundWave Pro Wireless Headphones",
+      "category": "headphones",
+      "price": 2799,
+      "stock": 3,
+      "delivery_days": 3,
+      "description": "Over-ear wireless headphones, 20hr battery, active noise cancellation.",
+      "attributes": [
+        "wireless",
+        "over-ear",
+        "noise-cancelling"
+      ]
+    },
+    {
+      "id": "sku_102",
+      "name": "BassLine Mini Earbuds",
+      "category": "headphones",
+      "price": 2999,
+      "stock": 12,
+      "delivery_days": 1,
+      "description": "Compact wireless earbuds, 8hr battery, charging case included.",
+      "attributes": [
+        "wireless",
+        "earbuds",
+        "compact"
+      ]
+    },
+    {
+      "id": "sku_103",
+      "name": "AirFit Sport Headphones",
+      "category": "headphones",
+      "price": 2899,
+      "stock": 7,
+      "delivery_days": 1,
+      "description": "Sweat-resistant wireless sport headphones with ear hooks, 10hr battery.",
+      "attributes": [
+        "wireless",
+        "sport",
+        "sweat-resistant"
+      ]
+    },
+    {
+      "id": "sku_104",
+      "name": "StudioMax Headphones",
+      "category": "headphones",
+      "price": 3499,
+      "stock": 5,
+      "delivery_days": 1,
+      "description": "Premium over-ear headphones with studio-grade sound, 30hr battery.",
+      "attributes": [
+        "wireless",
+        "over-ear",
+        "premium"
+      ]
+    },
+    {
+      "id": "sku_105",
+      "name": "EchoBeat Budget Earbuds",
+      "category": "headphones",
+      "price": 3999,
+      "stock": 0,
+      "delivery_days": 1,
+      "description": "Affordable wired earbuds with in-line mic.",
+      "attributes": [
+        "wired",
+        "budget",
+        "earbuds"
+      ]
+    },
+    {
+      "id": "sku_201",
+      "name": "Ceramic Coffee Mug Set",
+      "category": "home",
+      "price": 599,
+      "stock": 20,
+      "delivery_days": 1,
+      "description": "Set of 4 handcrafted ceramic mugs, 300ml each.",
+      "attributes": [
+        "kitchen",
+        "gift"
+      ]
+    },
+    {
+      "id": "sku_202",
+      "name": "Stainless Steel Water Bottle",
+      "category": "home",
+      "price": 449,
+      "stock": 40,
+      "delivery_days": 2,
+      "description": "750ml insulated bottle, keeps cold for 18 hours.",
+      "attributes": [
+        "kitchen",
+        "everyday"
+      ]
+    },
+    {
+      "id": "sku_301",
+      "name": "Classic Lego-Style Brick Set",
+      "category": "toys",
+      "price": 1499,
+      "stock": 20,
+      "delivery_days": 2,
+      "description": "250-piece interlocking brick set, compatible with major brands.",
+      "attributes": [
+        "kids",
+        "educational",
+        "gift"
+      ]
+    },
+    {
+      "id": "sku_302",
+      "name": "Remote Control Racing Car",
+      "category": "toys",
+      "price": 1299,
+      "stock": 9,
+      "delivery_days": 3,
+      "description": "High-speed RC car with rechargeable battery.",
+      "attributes": [
+        "kids",
+        "electronic",
+        "gift"
+      ]
+    },
+    {
+      "id": "sku_401",
+      "name": "Premium Leather Wallet",
+      "category": "accessories",
+      "price": 1199,
+      "stock": 15,
+      "delivery_days": 1,
+      "description": "Genuine leather bifold wallet with RFID protection.",
+      "attributes": [
+        "gift",
+        "everyday"
+      ]
+    },
+    {
+      "id": "sku_501",
+      "name": "StudyBook Lite Laptop",
+      "category": "laptops",
+      "price": 54999,
+      "stock": 8,
+      "delivery_days": 1,
+      "description": "Student-friendly laptop with 16GB RAM, 512GB SSD and long battery life.",
+      "attributes": [
+        "student-friendly",
+        "lightweight",
+        "16gb-ram",
+        "512gb-ssd"
+      ]
+    },
+    {
+      "id": "sku_502",
+      "name": "Campus Pro Laptop",
+      "category": "laptops",
+      "price": 62999,
+      "stock": 5,
+      "delivery_days": 2,
+      "description": "Performance laptop for students and professionals with fast processor and 512GB SSD.",
+      "attributes": [
+        "student-friendly",
+        "performance",
+        "512gb-ssd"
+      ]
+    },
+    {
+      "id": "sku_503",
+      "name": "Budget Student Laptop",
+      "category": "laptops",
+      "price": 45999,
+      "stock": 0,
+      "delivery_days": 1,
+      "description": "Affordable laptop designed for browsing, coding and academic work.",
+      "attributes": [
+        "student-friendly",
+        "budget",
+        "coding"
+      ]
+    }
+  ]
+}
