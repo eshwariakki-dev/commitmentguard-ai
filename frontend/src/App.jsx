@@ -1,49 +1,50 @@
-import { useState } from 'react'
-import './App.css'
-import RequirementsCard from './components/RequirementsCard'
-import VerificationCard from './components/VerificationCard'
-import AlternativeCard from './components/AlternativeCard'
-import AuditTrail from './components/AuditTrail'
+import { useState } from "react";
+import "./App.css";
+import RequirementsCard from "./components/RequirementsCard";
+import VerificationCard from "./components/VerificationCard";
+import AlternativeCard from "./components/AlternativeCard";
+import AuditTrail from "./components/AuditTrail";
 
-const API_BASE = 'http://localhost:5000'
+const API_BASE = "https://commitmentguard-ai.onrender.com";
 
-const EXAMPLE_REQUEST = 'I need wireless headphones under ₹3000 delivered tomorrow'
+const EXAMPLE_REQUEST =
+  "I need wireless headphones under ₹3000 delivered tomorrow";
 
 function App() {
-  const [requestText, setRequestText] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [result, setResult] = useState(null)
+  const [requestText, setRequestText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
 
   async function handleVerify() {
-    const text = requestText.trim() || EXAMPLE_REQUEST
-    setLoading(true)
-    setError(null)
-    setResult(null)
+    const text = requestText.trim() || EXAMPLE_REQUEST;
+    setLoading(true);
+    setError(null);
+    setResult(null);
 
     try {
       const res = await fetch(`${API_BASE}/api/verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ request: text }),
-      })
-      if (!res.ok) throw new Error(`Server responded with ${res.status}`)
-      const data = await res.json()
-      setResult(data)
+      });
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+      const data = await res.json();
+      setResult(data);
     } catch (err) {
       setError(
-        err.message.includes('fetch')
-          ? 'Cannot reach the backend. Make sure the Flask server is running on port 5000.'
-          : err.message
-      )
+        err.message.includes("fetch")
+          ? "Cannot reach the backend. Make sure the Flask server is running on port 5000."
+          : err.message,
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   function handleKeyDown(e) {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      handleVerify()
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      handleVerify();
     }
   }
 
@@ -54,7 +55,9 @@ function App() {
           <div className="logo-mark">CG</div>
           <div>
             <h1>CommitmentGuard AI</h1>
-            <p className="subtitle">Verified commitments for agentic commerce</p>
+            <p className="subtitle">
+              Verified commitments for agentic commerce
+            </p>
           </div>
         </div>
         <div className="status-pill">
@@ -78,11 +81,13 @@ function App() {
             rows={3}
           />
           <div className="request-footer">
-            <span className="example-hint">
-              Example: "{EXAMPLE_REQUEST}"
-            </span>
-            <button className="verify-btn" onClick={handleVerify} disabled={loading}>
-              {loading ? 'Verifying…' : 'Verify Request'}
+            <span className="example-hint">Example: "{EXAMPLE_REQUEST}"</span>
+            <button
+              className="verify-btn"
+              onClick={handleVerify}
+              disabled={loading}
+            >
+              {loading ? "Verifying…" : "Verify Request"}
             </button>
           </div>
         </section>
@@ -95,9 +100,12 @@ function App() {
 
         {result && (
           <div className="results">
-            <RequirementsCard requirements={result.requirements} buyerRequest={result.buyer_request} />
+            <RequirementsCard
+              requirements={result.requirements}
+              buyerRequest={result.buyer_request}
+            />
 
-            {result.final_status === 'NO_MATCH' ? (
+            {result.final_status === "NO_MATCH" ? (
               <div className="no-match-card">
                 <span className="status-badge blocked">NO MATCH</span>
                 <p>{result.message}</p>
@@ -109,7 +117,7 @@ function App() {
                   verification={result.verification}
                 />
 
-                {result.final_status === 'SELF_CORRECTED' && (
+                {result.final_status === "SELF_CORRECTED" && (
                   <AlternativeCard
                     originalName={result.proposed_product.name}
                     alternative={result.alternative}
@@ -117,12 +125,15 @@ function App() {
                   />
                 )}
 
-                {result.final_status === 'NO_ALTERNATIVE' && (
+                {result.final_status === "NO_ALTERNATIVE" && (
                   <div className="no-alt-card">
-                    <span className="status-badge blocked">NO VERIFIED ALTERNATIVE AVAILABLE</span>
+                    <span className="status-badge blocked">
+                      NO VERIFIED ALTERNATIVE AVAILABLE
+                    </span>
                     <p>
-                      No product in this category satisfies every requirement. Rather than make a
-                      false promise, CommitmentGuard stops here.
+                      No product in this category satisfies every requirement.
+                      Rather than make a false promise, CommitmentGuard stops
+                      here.
                     </p>
                   </div>
                 )}
@@ -134,7 +145,7 @@ function App() {
         )}
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
