@@ -1,110 +1,202 @@
 # CommitmentGuard AI
 
-A self-correcting trust layer for agentic commerce. Verifies that a merchant
-can actually fulfill what an AI shopping agent proposes — stock, price, and
-delivery — before checkout. If a proposed product fails, it automatically
-finds and re-verifies the nearest fulfillable alternative.
+### Verify Before You Commit
 
-## How it works
+## 📌 Overview
 
-1. Buyer types a request in plain English (e.g. "headphones under ₹3000, delivered tomorrow")
-2. `nlp_parser.py` extracts structured requirements (category, budget, delivery window) — uses Gemini if `GEMINI_API_KEY` is set, otherwise a deterministic fallback parser (works with zero setup)
-3. `commitment_guard.py` — pure deterministic Python, no AI — checks the proposed product against real catalog data
-4. If it fails any check, the same engine searches for the nearest product that passes all checks, and re-verifies it
-5. Every step is logged to an audit trail returned to the frontend
+CommitmentGuard AI is a smart verification system for AI-powered shopping agents.
 
-**Key architectural point:** the AI only interprets buyer language. It never
-decides whether a product is actually deliverable — that decision is 100%
-deterministic Python logic reading real data from `products.json`. This
-separation is the whole point of the project — an AI agent should never be
-the one certifying its own promises.
+It checks whether a merchant can actually fulfill a customer's request before allowing the agent to make a commitment.
 
-## Project structure
+The system checks:
 
-```
-commitmentguard-ai/
-  backend/
-    app.py               Flask server, exposes POST /api/verify
-    commitment_guard.py   Verification + self-correction engine (no AI)
-    nlp_parser.py         Natural language -> structured requirements
-    products.json         Merchant catalog (10 products)
-    requirements.txt
-  frontend/
-    src/
-      App.jsx             Main dashboard
-      components/         RequirementsCard, VerificationCard, AlternativeCard, AuditTrail
-```
+- Product availability
+- Customer's budget
+- Delivery requirement
+- Suitable alternatives when the request cannot be fulfilled
 
-## Running it — step by step
+This helps prevent an AI shopping agent from promising something the merchant cannot actually provide.
 
-You need two terminals open at the same time: one for the backend, one for the frontend.
+## 🎯 Problem Statement
 
-### Terminal 1 — Backend
+AI shopping agents can make commitments to customers without first checking whether the merchant can actually fulfill the request.
 
-```bash
-cd commitmentguard-ai/backend
-pip install -r requirements.txt
-python app.py
-```
+For example, an agent may promise a product without checking:
 
-You should see:
-```
- * Running on http://127.0.0.1:5000
-```
+- Whether the product is available
+- Whether it is within the customer's budget
+- Whether it can be delivered on time
 
-Leave this terminal running. Don't close it.
+This can lead to incorrect promises, failed orders, and a poor customer experience.
 
-**Note on Gemini (optional):** the app works with zero configuration using the
-fallback parser. If you want real Gemini-powered language understanding,
-get a free API key at https://aistudio.google.com/apikey and set it before
-running the backend:
+CommitmentGuard AI solves this by verifying the customer's requirements against the merchant's product information before allowing the commitment to proceed.
 
-```bash
-# Mac/Linux
-export GEMINI_API_KEY=your_key_here
+## 💡 Solution
 
-# Windows (cmd)
-set GEMINI_API_KEY=your_key_here
-```
+CommitmentGuard AI follows a simple approach:
 
-Then run `python app.py` again.
+**Understand → Verify → Decide → Commit**
 
-### Terminal 2 — Frontend
+The system takes the customer's request in natural language and extracts the important requirements such as:
 
-Open a **new** terminal window (leave the backend one running), then:
+- Product
+- Maximum budget
+- Delivery requirement
 
-```bash
-cd commitmentguard-ai/frontend
-npm install
-npm run dev
-```
+It then searches the merchant catalog and verifies whether the requirements can be fulfilled.
 
-You should see:
-```
-  VITE  ready in ... ms
-  ➜  Local:   http://localhost:5173/
-```
+If all conditions are satisfied, the commitment is marked as **VERIFIED**.
 
-Open that link in your browser. You should see the CommitmentGuard AI dashboard.
+If the product is not available, the system gives **NO MATCH**.
 
-## Demo script (for judges)
+If the requirements cannot be satisfied, the commitment is **BLOCKED** and the system looks for a suitable alternative.
 
-Type this exact request and click "Verify Request":
+An Audit Trail records the verification steps and the final decision.
 
-> I need wireless headphones under ₹3000 delivered tomorrow
+## ✨ Key Features
 
-Walk through what happens on screen:
-1. **AI understanding** — shows the extracted category, budget, delivery window
-2. **Commitment verification** — proposes SoundWave Pro Headphones (₹2799). Passes stock and budget, **fails delivery** (3-day, not 1-day) — shown as BLOCKED with the exact reason
-3. **Self-correction** — automatically finds AirFit Sport Headphones (₹2899), re-verifies it against all three checks, shows VERIFIED
-4. **Audit trail** — full timestamped log of every decision the system made, in order
+- **Natural Language Request Parsing**  
+  Understands customer requests and extracts product, budget, and delivery requirements.
 
-Other requests to try:
-- `Looking for a wallet under 1500` — clean VERIFIED, no correction needed
-- `I need headphones under 800` — no product fits, so it should return NO_MATCH or NO_ALTERNATIVE, demonstrating the system refuses to fabricate a fake promise
+- **Product Verification**  
+  Checks the merchant catalog for matching products.
 
-## Troubleshooting
+- **Budget Verification**  
+  Ensures the product is within the customer's maximum budget.
 
-- **"Cannot reach the backend" error in the browser:** make sure Terminal 1 (Flask) is still running and shows port 5000.
-- **`pip install` fails:** try `pip3` instead of `pip`, or `python3 app.py` instead of `python app.py`.
-- **Port 5000 already in use:** close whatever else is using it, or change the port number in `app.py`'s last line and update `API_BASE` in `frontend/src/App.jsx` to match.
+- **Stock Verification**  
+  Checks whether the required product is available.
+
+- **Delivery Verification**  
+  Checks whether the product can meet the customer's delivery requirement.
+
+- **Alternative Suggestions**  
+  Searches for a suitable alternative when the original request cannot be fulfilled.
+
+- **Audit Trail**  
+  Records the verification steps and explains how the final decision was reached.
+
+- **Razorpay Test Payment**  
+  Supports payment testing through Razorpay Test Mode.
+
+## 🔄 How It Works
+
+The system follows these steps:
+
+1. **Customer Request**  
+   The customer enters a request in natural language.
+
+2. **Requirement Extraction**  
+   The system extracts the product, budget, and delivery requirement.
+
+3. **Product Search**  
+   The system searches the merchant product catalog for a matching product.
+
+4. **Verification**  
+   The system checks:
+   - Product availability
+   - Stock
+   - Budget
+   - Delivery requirement
+
+5. **Decision**
+   - **VERIFIED** → All requirements are satisfied.
+   - **NO MATCH** → The requested product is not available in the catalog.
+   - **BLOCKED** → The requirements cannot be fulfilled.
+   - **Alternative** → The system searches for a suitable alternative when possible.
+
+6. **Audit Trail**  
+   The verification steps and final decision are recorded.
+
+7. **Payment**  
+   If the commitment is verified, the customer can proceed to Razorpay payment.
+
+## 🖥️ Project Screenshots
+
+### Customer Request
+
+The customer enters a request in natural language.
+
+![Customer Request](screenshots/dashboard.png)
+
+### Verified Commitment
+
+The system verifies the product, stock, budget, and delivery requirements before allowing the customer to proceed.
+
+![Verified Commitment](screenshots/verified.png)
+
+### Audit Trail
+
+The Audit Trail records the verification steps and shows how the final decision was reached.
+
+![Audit Trail](screenshots/audit-trail.png)
+
+### Razorpay Payment
+
+After the commitment is verified, the customer can proceed to Razorpay Test Mode for payment testing.
+
+![Razorpay Payment](screenshots/payment.png)
+
+### No Match
+
+If the requested product is not available in the merchant catalog, the system returns NO MATCH instead of showing an unrelated product.
+
+![No Match](screenshots/no-match.png)
+
+### Blocked Commitment
+
+If the customer's requirements cannot be fulfilled, the system blocks the commitment and searches for a suitable alternative.
+
+![Blocked Commitment](screenshots/blocked.png)
+
+## 💳 Payment Testing
+
+CommitmentGuard AI uses Razorpay Test Mode for payment testing.
+
+No real money is involved during testing.
+
+For card testing, the following test card number is used:
+
+**Test Card:** `4100 2800 0000 1007`
+
+This test card number is taken from Razorpay's official Test Card Details documentation.
+
+A future expiry date and test CVV are used during the test payment.
+
+A random mobile number is used only for testing purposes.
+
+> Note: The payment integration is configured for Razorpay Test Mode and is not intended for real transactions.
+
+## 🛠️ Technologies Used
+
+### Frontend
+
+- React
+- Vite
+- JavaScript
+- CSS
+
+### Backend
+
+- Python
+- Flask
+
+### Payment
+
+- Razorpay Test Mode
+
+### Data
+
+- JSON-based merchant product catalog
+
+## 🌐 Live Demo
+
+Try CommitmentGuard AI here:
+
+👉 [Open Live Demo](https://commitmentguard-ai.vercel.app/)
+
+## 👩‍💻 Author
+
+**Eshwari V Akki**
+
+GitHub: [eshwariakki-dev](https://github.com/eshwariakki-dev)
